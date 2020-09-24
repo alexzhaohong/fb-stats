@@ -1,0 +1,19 @@
+#!/usr/bin/python
+from sys import argv, stderr
+import os
+import json
+
+def print_help_text():
+    stderr.write("\nUsage\n")
+    stderr.write("\tfb-stats <json_dump>\n\n")
+    stderr.write("Provide relative or full path to valid json_dump from Facebook.\n")
+
+def fb_stats(args):
+    print("Hi mom")
+
+if __name__ == "__main__":
+    if len(argv) != 2:
+        stderr.write("ERR: Wrong number of args.\n")
+        print_help_text()
+        exit()
+    fb_stats(argv[1:])
