@@ -3,16 +3,47 @@ from sys import argv, stderr
 import os
 import json
 
+import lib.messages as messages
+# Keeping these as reference for what to add later
+# import lib.photos as photos
+# import lib.comments as comments
+# import lib.friends as friends
+# import lib.events as events
+# import lib.location as location
+# import lib.misc as misc #profile_information, search_history, like_and_reactions,about_you
+
+intensity_list = ["family-friendly", "adventurous", "career-ending"]
+
 def print_help_text():
-    stderr.write("\nUsage\n")
-    stderr.write("\tfb-stats <json_dump>\n\n")
-    stderr.write("Provide relative or full path to valid json_dump from Facebook.\n")
+    stderr.write("\nUsage:\n")
+    stderr.write("\tfb-stats <intensity> <json_dump>\n")
+    stderr.write("\t\tProvide relative or full path to valid json_dump from Facebook.\n\n")
+    stderr.write("Intensity Options:\n")
+    stderr.write("\tfamily-friendly - start with this if unsure\n")
+    stderr.write("\tadventurous     - includes a bit more info, some of which will make you cringe\n")
+    stderr.write("\tcareer-ending   - surely you've never said anything racist or homophobic, right?\n")
+
 
 def fb_stats(args):
-    print("Hi mom")
+    global intensity_list
+
+    intensity = args[0]
+    if intensity not in intensity_list:
+        stderr.write("Error: Given intensity not an option: {}".format(intensity))
+        print_help_text()
+        exit()
+
+    dump_dir = args[1]
+    if not os.path.isdir(dump_dir):
+        stderr.write("Error: Given dump directory does not exist: {}".format(dump_dir))
+        print_help_text()
+        exit()
+
+    messages.analyze_all(dump_dir, intensity)
+
 
 if __name__ == "__main__":
-    if len(argv) != 2:
+    if len(argv) != 3:
         stderr.write("ERR: Wrong number of args.\n")
         print_help_text()
         exit()
